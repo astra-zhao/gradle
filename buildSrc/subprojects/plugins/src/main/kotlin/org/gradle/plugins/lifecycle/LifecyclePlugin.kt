@@ -72,7 +72,7 @@ class LifecyclePlugin : Plugin<Project> {
 
     val ignoredSubprojects = listOf(
         "soak", // soak test
-        "distributions", // build distributions
+        "distributionsIntegTests", // test build distributions
         "architectureTest" // sanity check
     )
 
@@ -214,7 +214,7 @@ class LifecyclePlugin : Plugin<Project> {
             group = "verification"
             dependsOn(
                 "compileAll", ":docs:checkstyleApi", "codeQuality", ":internalBuildReports:allIncubationReportsZip",
-                ":distributions:checkBinaryCompatibility", ":docs:javadocAll",
+                ":architectureTest:checkBinaryCompatibility", ":docs:javadocAll",
                 ":architectureTest:test", ":toolingApi:toolingApiShadedJar")
         }
     }
@@ -227,8 +227,8 @@ class LifecyclePlugin : Plugin<Project> {
         register("packageBuild") {
             description = "Build production distros and smoke test them"
             group = "build"
-            dependsOn(":distributions:verifyIsProductionBuildEnvironment", ":distributions:buildDists",
-                ":distributions:integTest", ":docs:releaseNotes", ":docs:incubationReport", ":docs:checkDeadInternalLinks")
+            dependsOn(":distributionsFull:verifyIsProductionBuildEnvironment", ":distributionsFull:buildDists",
+                ":distributionsFull:forkingIntegTest", ":docs:releaseNotes", ":docs:incubationReport", ":docs:checkDeadInternalLinks")
         }
     }
 
@@ -240,8 +240,8 @@ class LifecyclePlugin : Plugin<Project> {
         register("promotionBuild") {
             description = "Build production distros, smoke test them and publish"
             group = "publishing"
-            dependsOn(":distributions:verifyIsProductionBuildEnvironment", ":distributions:buildDists",
-                ":distributions:integTest", ":docs:releaseNotes", "publish", ":docs:incubationReport", ":docs:checkDeadInternalLinks")
+            dependsOn(":distributionsFull:verifyIsProductionBuildEnvironment", ":distributionsFull:buildDists",
+                ":distributionsFull:forkingIntegTest", ":docs:releaseNotes", "publish", ":docs:incubationReport", ":docs:checkDeadInternalLinks")
         }
     }
 
@@ -304,7 +304,7 @@ class LifecyclePlugin : Plugin<Project> {
     private
     fun TaskContainer.configureCIIntegrationTestDistributionLifecycleTasks() {
         named(quickTest) {
-            dependsOn("integTest")
+            dependsOn("embeddedIntegTest")
         }
 
         named(platformTest) {

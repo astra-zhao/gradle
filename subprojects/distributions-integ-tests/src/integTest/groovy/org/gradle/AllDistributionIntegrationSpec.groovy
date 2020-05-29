@@ -22,7 +22,7 @@ import spock.lang.Shared
 
 class AllDistributionIntegrationSpec extends DistributionIntegrationSpec {
 
-    @Shared String version = buildContext.distZipVersion.version
+    @Shared String version = buildContext.distZipVersion.version // FIXME parse version from binDistribution file name
 
     @Override
     String getDistributionLabel() {

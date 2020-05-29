@@ -23,7 +23,7 @@ import org.gradle.util.TestPrecondition
 import spock.lang.Shared
 
 class DocsDistributionIntegrationSpec extends DistributionIntegrationSpec {
-    @Shared String version = buildContext.distZipVersion.version
+    @Shared String version = buildContext.distZipVersion.version // FIXME parse version from binDistribution file name
 
     @Override
     String getDistributionLabel() {
