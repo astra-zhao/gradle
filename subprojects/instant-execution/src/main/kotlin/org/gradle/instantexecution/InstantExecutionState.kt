@@ -192,8 +192,11 @@ class InstantExecutionState(
     fun Encoder.writeRelevantProjectsFor(nodes: List<Node>) {
         val projects = fillTheGapsOf(relevantProjectPathsFor(nodes))
         if (projects.isNotEmpty()) {
-            Logging.getLogger(InstantExecutionState::class.java)
-                .lifecycle("Captured Projects\n  ${projects.joinToString("\n  ") { it.path }}\n")
+            val logger = Logging.getLogger(InstantExecutionState::class.java)
+            logger.lifecycle("Captured Projects")
+            projects.forEach {
+                logger.lifecycle("  ${it.path}")
+            }
         }
         writeCollection(projects) { project ->
             writeString(project.path)
