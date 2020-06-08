@@ -303,6 +303,7 @@ class UnitTestAndCompilePlugin : Plugin<Project> {
                 if (distributionPluginEnabled) {
                     distribution {
                         maxLocalExecutors.set(System.getProperty("max.local.executors")?.toInt() ?: 0)
+                        enabled.set(true)
                         when {
                             OperatingSystem.current().isLinux() -> requirements.set(listOf("os=linux"))
                             OperatingSystem.current().isWindows() -> requirements.set(listOf("os=windows"))
