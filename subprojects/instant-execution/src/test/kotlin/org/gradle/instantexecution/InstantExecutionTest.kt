@@ -84,6 +84,35 @@ class InstantExecutionTest {
         )
     }
 
+    @Test
+    fun `deduplicate when filling gaps`() {
+
+        val root by projectMock(null)
+
+        val a by projectMock(root)
+        val a_a by projectMock(a)
+        val a_a_a by projectMock(a_a)
+
+        val b by projectMock(root)
+        val b_a by projectMock(b)
+        val b_a_a by projectMock(b_a)
+
+        assertThat(
+            fillTheGapsOf(
+                listOf(
+                    b_a_a, a_a_a, a_a_a, b_a_a, root
+                )
+            ),
+            equalTo(
+                listOf(
+                    root,
+                    b, b_a, b_a_a,
+                    a, a_a, a_a_a
+                )
+            )
+        )
+    }
+
     @Suppress("ClassName")
     private
     class projectMock(private val parent: Project?) {
