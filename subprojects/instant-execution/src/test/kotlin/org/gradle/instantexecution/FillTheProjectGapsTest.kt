@@ -25,7 +25,7 @@ import kotlin.reflect.KProperty
 
 
 @Suppress("LocalVariableName")
-class InstantExecutionTest {
+class FillTheProjectGapsTest {
 
     @Test
     fun `mind the gaps`() {
