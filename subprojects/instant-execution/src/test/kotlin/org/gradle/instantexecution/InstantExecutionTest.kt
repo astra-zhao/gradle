@@ -21,19 +21,21 @@ import org.gradle.api.Project
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
+import kotlin.reflect.KProperty
 
 
+@Suppress("LocalVariableName")
 class InstantExecutionTest {
 
     @Test
     fun `mind the gaps`() {
-        val root = project(null)
-        val a = project(root)
-        val a_b = project(a)
-        val a_c = project(a)
-        val d = project(root)
-        val d_e = project(d)
-        val d_e_f = project(d_e)
+        val root by projectMock(null)
+        val a by projectMock(root)
+        val a_b by projectMock(a)
+        val a_c by projectMock(a)
+        val d by projectMock(root)
+        val d_e by projectMock(d)
+        val d_e_f by projectMock(d_e)
         assertThat(
             fillTheGapsOf(
                 listOf(
@@ -58,10 +60,10 @@ class InstantExecutionTest {
 
     @Test
     fun `don't mind no gaps`() {
-        val root = project(null)
-        val a = project(root)
-        val a_b = project(a)
-        val a_c = project(a)
+        val root by projectMock(null)
+        val a by projectMock(root)
+        val a_b by projectMock(a)
+        val a_c by projectMock(a)
         assertThat(
             fillTheGapsOf(
                 listOf(
@@ -82,9 +84,21 @@ class InstantExecutionTest {
         )
     }
 
-    fun project(parent: Project?): Project {
-        return mock {
-            on(mock.parent).thenReturn(parent)
+    @Suppress("ClassName")
+    private
+    class projectMock(private val parent: Project?) {
+
+        private
+        lateinit var memoizedMock: Project
+
+        operator fun getValue(thisRef: Project?, property: KProperty<*>): Project {
+            if (!this::memoizedMock.isInitialized) {
+                memoizedMock = mock {
+                    on(mock.parent).thenReturn(parent)
+                    on(mock.toString()).thenReturn(property.name)
+                }
+            }
+            return memoizedMock
         }
     }
 }
