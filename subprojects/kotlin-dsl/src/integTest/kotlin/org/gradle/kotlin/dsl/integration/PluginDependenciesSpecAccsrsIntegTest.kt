@@ -26,12 +26,12 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 
 
-class PluginDependenciesSpecAccessorsIntegrationTest : AbstractKotlinIntegrationTest() {
+class PluginDependenciesSpecAccsrsIntegTest : AbstractKotlinIntegrationTest() {
 
     @Test
     @LeaksFileHandles("Kotlin Compiler Daemon working directory")
     @ToBeFixedForInstantExecution(because = "Kotlin Gradle Plugin")
-    fun `can use accessors for plugins in the buildSrc classpath`() {
+    fun canUseAccessorsForPluginsOnBuildSrcClasspath() {
 
         requireGradleDistributionOnEmbeddedExecuter()
 
