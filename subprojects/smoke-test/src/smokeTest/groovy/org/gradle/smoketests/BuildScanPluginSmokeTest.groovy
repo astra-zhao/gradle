@@ -16,14 +16,12 @@
 
 package org.gradle.smoketests
 
-
-import org.gradle.internal.scan.config.BuildScanPluginCompatibility
+import org.gradle.internal.enterprise.core.GradleEnterprisePluginPresence
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.VersionNumber
 import spock.lang.Unroll
 
-import static org.gradle.internal.scan.config.BuildScanPluginCompatibility.FIRST_GRADLE_ENTERPRISE_PLUGIN_VERSION
 
 class BuildScanPluginSmokeTest extends AbstractSmokeTest {
 
@@ -76,7 +74,7 @@ class BuildScanPluginSmokeTest extends AbstractSmokeTest {
         def output = buildAndFail().output
 
         then:
-        output.contains(BuildScanPluginCompatibility.OLD_SCAN_PLUGIN_VERSION_MESSAGE)
+        output.contains(GradleEnterprisePluginPresence.OLD_SCAN_PLUGIN_VERSION_MESSAGE)
 
         where:
         version << UNSUPPORTED
@@ -95,7 +93,7 @@ class BuildScanPluginSmokeTest extends AbstractSmokeTest {
     }
 
     void usePluginVersion(String version) {
-        def gradleEnterprisePlugin = VersionNumber.parse(version) >= FIRST_GRADLE_ENTERPRISE_PLUGIN_VERSION
+        def gradleEnterprisePlugin = VersionNumber.parse(version) >= VersionNumber.parse("3.0")
         if (gradleEnterprisePlugin) {
             settingsFile << """
                 plugins {
